@@ -1,9 +1,6 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 const mnemonicOrPrivkey = process.env.MNEMONIC || process.env.PRIVKEY;
-if (!mnemonicOrPrivkey) {
-    throw new Error("### missing env: one of MNEMONIC or PRIVKEY need to be set");
-}
 
 module.exports = {
     networks: {
