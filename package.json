@@ -1,0 +1,20 @@
+{
+  "name": "artis2-launch-contracts",
+  "version": "1.0.0",
+  "description": "Solidity contracts for launching ARTIS 2.0",
+  "scripts": {
+    "build": "truffle compile",
+    "test": "truffle test",
+    "lint": "solhint -w 0 contracts/*.sol contracts/*/*.sol"
+  },
+  "author": "dho@lab10.coop",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "chai-as-promised": "^7.1.1",
+    "solhint": "^3.3.2",
+    "truffle": "^5.1.67",
+    "@openzeppelin/contracts": "^3.4.0",
+    "@truffle/hdwallet-provider": "^1.2.2",
+    "@openzeppelin/test-helpers": "^0.5.10"
+  }
+}
