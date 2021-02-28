@@ -10,11 +10,12 @@
   "author": "dho@lab10.coop",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
+    "@openzeppelin/contracts": "^3.4.0",
+    "@openzeppelin/test-helpers": "^0.5.10",
+    "@poanet/solidity-flattener": "^3.0.6",
+    "@truffle/hdwallet-provider": "^1.2.2",
     "chai-as-promised": "^7.1.1",
     "solhint": "^3.3.2",
-    "truffle": "^5.1.67",
-    "@openzeppelin/contracts": "^3.4.0",
-    "@truffle/hdwallet-provider": "^1.2.2",
-    "@openzeppelin/test-helpers": "^0.5.10"
+    "truffle": "^5.1.67"
   }
 }
