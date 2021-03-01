@@ -57,8 +57,11 @@ module.exports = async function(
         console.log("address of old token:", oldTokenAddr);
 
         // make sure ERC1820 is deployed (needed for ERC777)
-        await singletons.ERC1820Registry(from);
-
+        const erc1820Deployed = (await web3.eth.getCode("0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24")).length > 2;
+        if (!erc1820Deployed) {
+            console.log(`deploying ERC1820...`);
+            await singletons.ERC1820Registry(from);
+        }
 
         console.log(`deploying new xATS token with total supply ${web3.utils.fromWei(initialSupply)}...`);
         // deploy new xATS token
@@ -68,7 +71,7 @@ module.exports = async function(
         const launchC = await Launcher.new(oldTokenAddr, xATSTokenC.address);
         console.log(`deployed launcher to ${launchC.address}`);
 
-        const launchContractDepositAmount = web3.utils.toWei(String(50_000_000));
+        const launchContractDepositAmount = web3.utils.toWei(String(65_000_000));
         console.log(`funding the launcher with ${web3.utils.fromWei(launchContractDepositAmount)} xATS ...`);
         await xATSTokenC.transfer(launchC.address, launchContractDepositAmount);
 

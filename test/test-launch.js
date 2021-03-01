@@ -23,7 +23,7 @@ contract("Artis2Launch", accounts => {
     const launcherNewTokenDeposits = ether("1000");
 
     const discountPeriodStart = 1616716800; // Fri Mar 26 2021 00:00:00 GMT+0000
-    const discountPerDay = 4000; // daily addition to the denominator during discount period
+    const discountPerDay = 20000; // daily addition to the denominator during discount period
     const swapRatioNominator = 2000000;
     const swapRatioDenominator = 10000000;
     const swapDisabledAfter = 1616716800 + (86400*365); // + 1 year
@@ -161,14 +161,15 @@ contract("Artis2Launch", accounts => {
             );
         });
 
-        it("#1.6 swap should become unavailable after 1 year", async () => {
-            const targetTs = discountPeriodStart + (86400 * 365) + 1;
+        it("#1.6 disallow preliminary withdrawal of remaining new tokens", async () => {
+            await xATS_tmpC.transfer(launcherC.address, amountToSwapBN, {from: user1});
+            expectRevert(
+                launcherC.withdrawRemainingNewTokensTo(DAO),
+                "withdrawal not yet allowed"
+            );
         });
-    });
 
-    describe("#2 token handling", () => {
-
-        it("#2.1 allow owner to withdraw alien tokens", async () => {
+        it("#1.7 allow owner to withdraw alien tokens", async () => {
             const alienTokenC = await ERC677TokenMock.new(oldTokenTotalSupply);
             // send some of them to the launcher contract
             await alienTokenC.transfer(launcherC.address, ether("100"));
@@ -176,7 +177,7 @@ contract("Artis2Launch", accounts => {
             launcherC.withdrawAlienTokens(alienTokenC.address);
         });
 
-        it("#2.2 disallow others to withdraw alien tokens", async () => {
+        it("#1.8 disallow others to withdraw alien tokens", async () => {
             const alienTokenC = await ERC677TokenMock.new(oldTokenTotalSupply);
             // send some of them to the launcher contract
             await alienTokenC.transfer(launcherC.address, ether("100"));
@@ -187,7 +188,7 @@ contract("Artis2Launch", accounts => {
             );
         });
 
-        it("#2.3 disallow withdrawal of old tokens", async () => {
+        it("#1.9 disallow withdrawal of old tokens", async () => {
             await xATS_tmpC.transfer(launcherC.address, amountToSwapBN, {from: user1});
             expectRevert(
                 launcherC.withdrawAlienTokens(xATS_tmpC.address),
@@ -195,15 +196,7 @@ contract("Artis2Launch", accounts => {
             );
         });
 
-        it("#2.4 disallow preliminary withdrawal of remaining new tokens", async () => {
-            await xATS_tmpC.transfer(launcherC.address, amountToSwapBN, {from: user1});
-            expectRevert(
-                launcherC.withdrawRemainingNewTokensTo(DAO),
-                "withdrawal not yet allowed"
-            );
-        });
-
-        it("#2.5 allow withdrawal of remaining new tokens after the swapping period to owner", async () => {
+        it("#1.10 allow withdrawal of remaining new tokens after the swapping period to owner", async () => {
             await xATS_tmpC.transfer(launcherC.address, amountToSwapBN, {from: user1});
             // we did fast forward before, thus are in discounted mode
             const timeOfTransfer = await time.latest();
@@ -224,5 +217,14 @@ contract("Artis2Launch", accounts => {
                 "couldn't withdraw the expected amount of remaining new tokens"
             );
         });
+
+        it("#1.11 swap should become unavailable after 1 year", async () => {
+            // we did already fast forward to >1 year in the previous test
+            expectRevert(
+                xATS_tmpC.transferAndCall(launcherC.address, amountToSwapBN, {from: user1}, 0x0),
+                "swapping period over"
+            );
+        });
+
     });
 });

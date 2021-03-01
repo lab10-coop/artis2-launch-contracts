@@ -27,7 +27,8 @@ does the following:
 `XATSToken` is an ERC777 token based on the [OpenZeppelin implementation](https://docs.openzeppelin.com/contracts/3.x/erc777).
 It additionally implements the [ERC677 interface](https://github.com/ethereum/EIPs/issues/677) in order to be compatible with [TokenBridge](https://docs.tokenbridge.net/). This is important because the xATS token will later be bridged to the new ARTIS 2.0 chain.
 
-Note:
-The `transfer()` method of xATS_old does try to invoke the ERC677 callback and can thus in principe be used for the swap.
-This is however not safe. Specifically the sender may not receive new xATS if the transaction gas limit wasn't set high enough for the ERC677 callback to succeed.
-In order to be safe, the swap should thus be done by using `transferAndCall()`.
+Notes
+In order to make sure that old tokens are accepted by the Launcher contract only if the swap is successful (swapping period not over, enough new tokens to hand out), the oldToken contract needs to enforce successful execution of the ERC677 hook not just for `transferAndCall()`, but also for `transfer()`.
+To facilitate this, the Launcher contract implements [ERC165](https://eips.ethereum.org/EIPS/eip-165) with the `IERC677Receiver` interface published.
+The same mechanism can be used to later attach the new xATS token to a tokenbridge mediator. For all transfer methods (except the ERC777 specific ones which have their own callback mechanism) it checks if the receiver advertised an implementation of `IERC677Receiver` via ERC165 and if so enforces successful execution.
+The tokenbridge mediator contracts don't implement ERC165 yet, but that can be added easily.
