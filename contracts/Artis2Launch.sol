@@ -90,7 +90,7 @@ contract Artis2Launch is IERC677Receiver, ERC165, Ownable {
         view
         returns(uint256)
     {
-        uint256 discountTimeframe = timestamp > DISCOUNT_PERIOD_START ? block.timestamp - DISCOUNT_PERIOD_START : 0;
+        uint256 discountTimeframe = timestamp > DISCOUNT_PERIOD_START ? timestamp - DISCOUNT_PERIOD_START : 0;
         uint256 nrDiscountDays = discountTimeframe / 86400;
         return timestamp <= SWAP_DISABLED_AFTER ?
             amount * SWAP_RATIO_NOMINATOR / (SWAP_RATIO_DENOMINATOR + (nrDiscountDays* DISCOUNT_PER_DAY)) :
