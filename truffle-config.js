@@ -9,7 +9,7 @@ module.exports = {
             provider: () =>
                 new HDWalletProvider(
                     mnemonicOrPrivkey,
-                    "https://rpc.xdaichain.com"
+                    "https://xdai-rpc.mars.lab10.io"
                 ),
             network_id: 100,
             gas: 8e6,

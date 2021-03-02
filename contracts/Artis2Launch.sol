@@ -24,7 +24,7 @@ contract Artis2Launch is IERC677Receiver, ERC165, Ownable {
     uint256 public constant SWAP_RATIO_NOMINATOR = 2000000;
     uint256 public constant SWAP_RATIO_DENOMINATOR = 10000000;
 
-    uint256 public constant DISCOUNT_PERIOD_START = 1616716800; // Fri Mar 26 2021 00:00:00 GMT+0000
+    uint256 public constant DISCOUNT_PERIOD_START = 1618531200; // Fri Apr 16 2021 00:00:00 GMT+0000
     uint256 public constant DISCOUNT_PER_DAY = 20000; // daily addition to the denominator during discount period
 
     // the swapping opportunity closes 1 year after the start of the discount period

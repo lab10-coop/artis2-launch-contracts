@@ -22,11 +22,11 @@ contract("Artis2Launch", accounts => {
     const amountToSwapBN = ether("5");
     const launcherNewTokenDeposits = ether("1000");
 
-    const discountPeriodStart = 1616716800; // Fri Mar 26 2021 00:00:00 GMT+0000
+    const discountPeriodStart = 1618531200; // Fri Apr 16 2021 00:00:00 GMT+0000
     const discountPerDay = 20000; // daily addition to the denominator during discount period
     const swapRatioNominator = 2000000;
     const swapRatioDenominator = 10000000;
-    const swapDisabledAfter = 1616716800 + (86400*365); // + 1 year
+    const swapDisabledAfter = discountPeriodStart + (86400*365); // + 1 year
 
     // amount needs to be either an ether denominated number or string or a wei denominated BN
     function expectedSwappedAmount(amount) {
